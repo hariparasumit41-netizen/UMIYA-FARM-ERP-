@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UMIYA FARM</title>
+<style>
+:root{--bg:#0d1526;--panel:#131d33;--panel2:#0f1a2e;--border:#233052;--yellow:#eab308;--text:#e7ecf5;--muted:#8b98b3;--green:#22c55e;--red:#ef4444;}
+body[data-theme="light"]{--bg:#f4f6fb;--panel:#ffffff;--panel2:#eef1f7;--border:#dbe1ec;--text:#0d1526;--muted:#5b6478;}
+body[data-theme="black"]{--bg:#000000;--panel:#0b0b0b;--panel2:#161616;--border:#333333;--text:#ffffff;--muted:#aaaaaa;}
+*{box-sizing:border-box;}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);padding-top:env(safe-area-inset-top,0px);}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);background:var(--panel2);position:sticky;top:0;z-index:5;height:64px;box-sizing:border-box;}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;}
+.brand .logo{width:34px;height:34px;border-radius:8px;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.brand small{display:block;color:var(--muted);font-weight:400;font-size:11px;}
+.layout{display:flex;height:calc(100vh - 64px);}
+.sidebar{width:230px;height:100%;background:var(--panel2);border-right:1px solid var(--border);padding:14px 10px;flex-shrink:0;overflow-y:scroll;scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#5b6b8c var(--panel2);}
+.sidebar::-webkit-scrollbar{width:10px;}
+.sidebar::-webkit-scrollbar-track{background:var(--panel2);}
+.sidebar::-webkit-scrollbar-thumb{background:#5b6b8c;border-radius:6px;border:2px solid var(--panel2);}
+.sidebar::-webkit-scrollbar-thumb:hover{background:#73839e;}
+.sidebar h4{font-size:11px;color:var(--muted);margin:14px 8px 6px;letter-spacing:.05em;}
+.nav-item{display:flex;justify-content:space-between;padding:9px 10px;border-radius:8px;font-size:14px;cursor:pointer;margin:2px 0;}
+.nav-item span.gu{color:var(--muted);font-size:12px;}
+.nav-item:hover{background:#1a2540;}
+.nav-item.active{background:var(--yellow);color:#1a1200;font-weight:600;}
+.nav-item.active span.gu{color:#3a2c00;}
+.nav-item.soon{opacity:.4;cursor:default;}
+main{flex:1;height:100%;padding:26px 30px;max-width:100%;overflow-y:auto;overflow-x:auto;}
+.eyebrow{color:var(--yellow);font-size:12px;font-weight:700;letter-spacing:.05em;}
+h1{margin:4px 0 2px;font-size:26px;}
+.sub{color:var(--muted);font-size:13px;margin-bottom:18px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:18px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+@media(max-width:1100px){.grid4{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.grid4{grid-template-columns:1fr;}}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.card .label{color:var(--muted);font-size:13px;margin-bottom:4px;}
+.card .val{font-size:22px;font-weight:700;}
+.card.green .val{color:var(--green);}
+.card.red .val{color:var(--red);}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.card-top .icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.card-top .gu{color:var(--muted);font-size:11px;padding-top:8px;}
+.qbtn{background:var(--panel2);color:var(--text);border:1px solid var(--border);padding:9px 16px;border-radius:8px;font-weight:600;cursor:pointer;font-size:13px;margin-right:8px;margin-bottom:8px;}
+.qbtn:hover{border-color:var(--yellow);}
+.chartrow{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;}
+.bars{display:flex;align-items:flex-end;gap:10px;height:140px;margin-top:14px;}
+.bars .b{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
+.bars .bfill{width:100%;background:#3b82f6;border-radius:4px 4px 0 0;min-height:2px;}
+.bars .blabel{color:var(--muted);font-size:11px;margin-top:6px;}
+@media(max-width:900px){.chartrow{grid-template-columns:1fr;}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:16px;}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+.panel-head h3{margin:0;font-size:16px;}
+.btn{background:var(--yellow);color:#1a1200;border:none;padding:9px 16px;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;}
+.btn.secondary{background:transparent;color:var(--muted);border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;color:var(--muted);font-weight:600;padding:8px 6px;border-bottom:1px solid var(--border);font-size:12px;white-space:nowrap;}
+td{padding:10px 6px;border-bottom:1px solid var(--border);white-space:nowrap;}
+tr:last-child td{border-bottom:none;}
+.actions button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;margin-right:6px;}
+.empty{color:var(--muted);font-size:13px;padding:14px 0;}
+.search{width:100%;max-width:280px;background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;font-size:13px;margin-bottom:14px;}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:20;padding:16px;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.modal-head h3{margin:0;}
+.modal-head button{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.field.full{grid-column:1/-1;}
+.field label{display:block;font-size:13px;margin-bottom:5px;}
+.field input,.field select,.field textarea{width:100%;background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:9px 10px;border-radius:8px;font-size:14px;font-family:inherit;}
+.field textarea{min-height:56px;resize:vertical;}
+.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--yellow);border-color:var(--yellow);}
+.hint{font-size:11px;color:var(--muted);margin-top:4px;}
+.modal-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
+.notice{background:#1a2a1a;border:1px solid #2f5a2f;color:#8fd98f;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:16px;}
+.foot{text-align:center;color:var(--muted);font-size:12px;padding:24px 0 8px;}
+@media(max-width:760px){.sidebar{width:180px;} main{padding:16px;} .field-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand"><img id="brandLogo" src="images/umiya-farm-logo.png" style="width: 60px;" alt="Umiya Farm logo"><div><span>UMIYA FARM</span></div></div>
+  <div style="display:flex;align-items:center;gap:16px;color:var(--muted);font-size:14px;">
+    <span id="today"></span>
+    <span style="cursor:pointer;" title="Refresh" onclick="render()">🔄</span>
+    <span id="themeToggleIcon" style="cursor:pointer;" title="Theme" onclick="toggleTheme()">🌙</span>
+    <span style="cursor:pointer;position:relative;" title="Notifications">🔔</span>
+  </div>
+</div>
+<div class="layout">
+  <div class="sidebar" id="sidebar"></div>
+  <main id="main"></main>
+</div>
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="modal-head"><h3 id="modalTitle">Add</h3><button onclick="closeModal()">✕</button></div>
+    <div id="modalNotice"></div>
+    <div class="field-grid" id="modalFields"></div>
+    <div class="modal-foot">
+      <button class="btn secondary" onclick="closeModal()">Cancel / રદ કરો</button>
+      <button class="btn" onclick="saveActive()">Save / સેવ કરો</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const todayISO = new Date().toISOString().slice(0,10);
+const todayStr = new Date().toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
+document.getElementById('today').textContent = todayStr;
+
+const THEME_ICON = {dark:'🌙', light:'☀️', black:'⚫'};
+const THEME_ORDER = ['dark','light','black'];
+function applyTheme(){
+  const t = localStorage.getItem('agritech_theme') || 'dark';
+  document.body.dataset.theme = t;
+  const icon = document.getElementById('themeToggleIcon');
+  if(icon) icon.textContent = THEME_ICON[t]||'🌙';
+}
+function setTheme(t){
+  localStorage.setItem('agritech_theme', t);
+  applyTheme();
+  if(activeKey) render();
+}
+function toggleTheme(){
+  const cur = localStorage.getItem('agritech_theme') || 'dark';
+  const next = THEME_ORDER[(THEME_ORDER.indexOf(cur)+1)%THEME_ORDER.length];
+  setTheme(next);
+}
+applyTheme();
+
+const store = k => JSON.parse(localStorage.getItem('agritech_'+k) || '[]');
+const save = (k,v) => localStorage.setItem('agritech_'+k, JSON.stringify(v));
+const money = n => '₹' + (Number(n)||0).toLocaleString('en-IN');
+const names = k => store(k).map(r=>r.name);
+const fmtK = v => v>=1000 ? (v/1000).toFixed(v%1000===0?0:1)+'k' : Math.round(v);
+const niceCeil = v => { v=v||1; const p=Math.pow(10,Math.floor(Math.log10(v))); const n=v/p; const f=n<=1?1:n<=2?2:n<=5?5:10; return f*p; };
+function barChartSVG(labels,series){
+  const W=760,H=200,padL=34,padB=22,padT=10,padR=10;
+  const innerW=W-padL-padR, innerH=H-padT-padB;
+  const maxV=Math.max(1,...series.flatMap(s=>s.values)); const niceMax=niceCeil(maxV);
+  const n=labels.length||1; const groupW=innerW/n; const barW=Math.min(22,groupW/(series.length+1));
+  let bars='';
+  labels.forEach((lab,i)=>{
+    const gx=padL+i*groupW;
+    series.forEach((s,si)=>{
+      const v=s.values[i]||0; const h=innerH*(v/niceMax);
+      const x=gx+groupW/2-(series.length*barW)/2+si*barW; const y=padT+innerH-h;
+      bars+=`<rect x="${x}" y="${y}" width="${Math.max(1,barW-3)}" height="${Math.max(0,h)}" fill="${s.color}" rx="2"/>`;
+    });
+    bars+=`<text x="${gx+groupW/2}" y="${H-4}" font-size="10" fill="#8b98b3" text-anchor="middle">${lab}</text>`;
+  });
+  let grid='';
+  for(let g=0;g<=4;g++){const v=niceMax*g/4; const y=padT+innerH-innerH*g/4;
+    grid+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#233052" stroke-dasharray="3,3"/><text x="${padL-6}" y="${y+3}" font-size="10" fill="#8b98b3" text-anchor="end">${fmtK(v)}</text>`;}
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:180px;display:block;">${grid}${bars}</svg>`;
+}
+function lineChartSVG(labels,values,color){
+  color=color||'#3b82f6';
+  const W=760,H=200,padL=30,padB=22,padT=10,padR=10;
+  const innerW=W-padL-padR, innerH=H-padT-padB;
+  const maxV=Math.max(1,...values); const niceMax=niceCeil(maxV);
+  const n=labels.length||1; const stepX=innerW/Math.max(1,n-1);
+  const pts=values.map((v,i)=>[padL+i*stepX, padT+innerH-innerH*(v/niceMax)]);
+  const path=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+  let grid='';
+  for(let g=0;g<=4;g++){const v=niceMax*g/4; const y=padT+innerH-innerH*g/4;
+    grid+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#233052" stroke-dasharray="3,3"/><text x="${padL-6}" y="${y+3}" font-size="10" fill="#8b98b3" text-anchor="end">${fmtK(v)}</text>`;}
+  const labelsSvg=labels.map((l,i)=>`<text x="${(padL+i*stepX).toFixed(1)}" y="${H-4}" font-size="10" fill="#8b98b3" text-anchor="middle">${l}</text>`).join('');
+  const dots=pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="${color}"/>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:180px;display:block;">${grid}<path d="${path}" fill="none" stroke="${color}" stroke-width="2"/>${dots}${labelsSvg}</svg>`;
+}
+function multiLineChartSVG(labels,series){
+  const W=760,H=200,padL=34,padB=34,padT=10,padR=10;
+  const innerW=W-padL-padR, innerH=H-padT-padB;
+  const maxV=Math.max(1,...series.flatMap(s=>s.values)); const niceMax=niceCeil(maxV);
+  const n=labels.length||1; const stepX=innerW/Math.max(1,n-1);
+  let grid='';
+  for(let g=0;g<=4;g++){const v=niceMax*g/4; const y=padT+innerH-innerH*g/4;
+    grid+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#233052" stroke-dasharray="3,3"/><text x="${padL-6}" y="${y+3}" font-size="10" fill="#8b98b3" text-anchor="end">${fmtK(v)}</text>`;}
+  const labelsSvg=labels.map((l,i)=>`<text x="${(padL+i*stepX).toFixed(1)}" y="${padT+innerH+16}" font-size="10" fill="#8b98b3" text-anchor="middle">${l}</text>`).join('');
+  let lines='';
+  series.forEach(s=>{
+    const pts=s.values.map((v,i)=>[padL+i*stepX, padT+innerH-innerH*(v/niceMax)]);
+    const path=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+    lines+=`<path d="${path}" fill="none" stroke="${s.color}" stroke-width="2"/>`+pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="${s.color}"/>`).join('');
+  });
+  const legend=series.map(s=>`<span style="display:inline-flex;align-items:center;gap:4px;margin-right:14px;font-size:12px;"><span style="width:9px;height:9px;background:${s.color};display:inline-block;border-radius:2px;"></span><span style="color:${s.color};">${s.name}</span></span>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:180px;display:block;">${grid}${lines}${labelsSvg}</svg><div style="text-align:center;margin-top:4px;">${legend}</div>`;
+}
+const PALETTE=['#eab308','#3b82f6','#22c55e','#ef4444','#a855f7','#f97316','#14b8a6','#ec4899'];
+function pieChart(items){
+  const total=items.reduce((s,i)=>s+Math.max(0,i.value),0)||1;
+  let acc=0; const stops=items.map((i,idx)=>{const v=Math.max(0,i.value);const start=acc/total*360;acc+=v;const end=acc/total*360;return `${i.color||PALETTE[idx%PALETTE.length]} ${start}deg ${end}deg`;}).join(',');
+  const legend=items.map((i,idx)=>`<span style="display:inline-flex;align-items:center;gap:4px;margin-right:14px;font-size:12px;color:var(--muted);"><span style="width:9px;height:9px;background:${i.color||PALETTE[idx%PALETTE.length]};display:inline-block;border-radius:2px;"></span>${i.label}</span>`).join('');
+  return `<div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:14px 0;">
+    <div style="width:180px;height:180px;border-radius:50%;background:conic-gradient(${stops});"></div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;">${legend}</div></div>`;
+}
+
+const M = {
+  vadis:{route:'Fields / Vadi',gu:'વાડી',group:'FARM / ખેતર',eyebrow:'FIELDS / ખેતર',title:'Vadi / Fields Management / વાડી વ્યવસ્થાપન',
+    fields:[{k:'name',l:'Vadi Name / વાડીનું નામ',req:1},{k:'location',l:'Location / સ્થળ'},{k:'area',l:'Total Area / કુલ ક્ષેત્રફળ',t:'number',d:0},
+     {k:'areaUnit',l:'ક્ષેત્રફળ એકમ',t:'select',o:['વિઘા','એકર','બીઘા','હેક્ટર','ચોરસ મીટર','ચોરસ કિલોમીટર','ગુંઠા','ચોરસ ફૂટ','ચોરસ વાર'],d:'વિઘા'},
+      {k:'water',l:'Water Source / પાણીનો સ્ત્રોત'},{k:'notes',l:'Notes / નોંધ',t:'textarea'}],
+    cols:[['name','Vadi Name / વાડીનું નામ'],['location','Location / સ્થળ'],['area','Total Area / ક્ષેત્રફળ'],['soil','Soil Type / જમીન'],['water','Water Source / પાણી']]},
+  crops:{route:'Crop Management',gu:'પાક',group:'FARM / ખેતર',eyebrow:'CROPS / પાક',title:'Crop Management / પાક વ્યવસ્થાપન',
+    fields:[{k:'name',l:'Crop Name / પાકનું નામ',req:1},{k:'vadi',l:'Vadi / વાડી',t:'select',o:()=>names('vadis')},
+      {k:'season',l:'Season',t:'select',o:['ઉનાળુ પાક','શિયાળુ પાક','ચોમાસુ પાક']},
+      {k:'status',l:'Status / સ્થિતિ',t:'select',o:['વધતો પાક','લણણી થયેલ','આયોજિત'],d:'વધતો પાક'},
+      {k:'sowingDate',l:'Sowing Date / વાવણી તારીખ',t:'date'},{k:'seedName',l:'Seed Name / બીજનું નામ'},
+      {k:'seedQty',l:'Seed Qty / બીજનો જથ્થો',t:'number',d:0},{k:'seedCost',l:'Seed Cost / બીજની કિંમત',t:'number',d:0},
+      {k:'area',l:'Area / ક્ષેત્રફળ',t:'number',d:0},{k:'areaUnit',l:'Area Unit / ક્ષેત્રફળ એકમ',t:'select',o:['વિઘા','બીઘા','એકર','હેક્ટર','ચોરસ મીટર','ચોરસ ફૂટ','ગુંઠા','વાર','ચોરસ વાર'],d:'વિઘા'},
+      {k:'nurseryCost',l:'Nursery Cost / નર્સરી ખર્ચ',t:'number',d:0},{k:'labourCost',l:'Labour Cost / મજૂરી ખર્ચ',t:'number',d:0},
+      {k:'fertilizerCost',l:'Fertilizer Cost / ખાતર ખર્ચ',t:'number',d:0},{k:'pesticideCost',l:'Pesticide Cost / દવા ખર્ચ',t:'number',d:0},
+      {k:'irrigationCost',l:'Irrigation Cost / સિંચાઈ ખર્ચ',t:'number',d:0},{k:'otherCost',l:'Other Cost / અન્ય ખર્ચ',t:'number',d:0},
+      {k:'expectedProd',l:'Expected Prod / અંદાજિત ઉત્પાદન',t:'number',d:0},{k:'actualProd',l:'Actual Prod / ખરેખરું ઉત્પાદન',t:'number',d:0},
+      {k:'prodUnit',l:'Prod Unit / ઉત્પાદન એકમ',t:'select',o:['કિલો (kg)','ક્વિન્ટલ','ટન','મણ','ગ્રામ (g)','બોરી','ગાંસડી'],d:'કિલો (kg)'},{k:'sellingRate',l:'Selling ₹/unit / વેચાણ ભાવ',t:'number',d:0},
+      {k:'notes',l:'Notes / નોંધ',t:'textarea'}],
+    cols:[['name','Crop Name / પાકનું નામ'],['vadi','Vadi / વાડી'],['season','Season / ઋતુ'],['status','Status / સ્થિતિ'],
+      ['area','Area / ક્ષેત્રફળ'],['actualProd','Actual Prod / ઉત્પાદન'],['sellingRate','Selling ₹/unit / ભાવ'],
+      ['_expense','Expense / ખર્ચ'],['_revenue','Revenue / આવક'],['_profit','Profit / નફો']],
+    calc:r=>{const exp=(+r.seedCost||0)+(+r.nurseryCost||0)+(+r.labourCost||0)+(+r.fertilizerCost||0)+(+r.pesticideCost||0)+(+r.irrigationCost||0)+(+r.otherCost||0);
+      const rev=(+r.actualProd||0)*(+r.sellingRate||0);r._expense=money(exp);r._revenue=money(rev);r._profit=money(rev-exp);}},
+  dailyEntries:{route:'Daily Entry',gu:'રોજની નોંધ',group:'DAILY OPERATIONS',eyebrow:'DAILY OPERATIONS / રોજિંદી કામગીરી',title:'Daily Entry / રોજની નોંધ',
+    fields:[{k:'date',l:'Date / તારીખ',t:'date',req:1,d:todayISO},{k:'vadi',l:'Vadi / વાડી',t:'select',o:()=>names('vadis')},
+      {k:'crop',l:'Crop / પાક',t:'select',o:()=>names('crops')},
+      {k:'activityType',l:'પ્રવૃત્તિનો પ્રકાર',t:'select',o:['વાવણી','નીંદામણ','ખાતર આપવું','સિંચાઈ','દવાનો છંટકાવ','લણણી','અન્ય']},
+      {k:'desc',l:'Description / વર્ણન'},
+      {k:'qty',l:'Quantity / જથ્થો',t:'number',d:0},{k:'unit',l:'એકમ',t:'select',o:['મણ','કિલો (kg)','ગ્રામ (g)','ક્વિન્ટલ','ટન','લિટર (L)','બોરી','પેકેટ','નંગ'],d:'મણ'},
+      {k:'rate',l:'Rate / ભાવ',t:'number',d:0},{k:'total',l:'Total Amount / કુલ રકમ',t:'number',d:0},{k:'notes',l:'Notes / નોંધ',t:'textarea'}],
+    cols:[['date','Date / તારીખ'],['vadi','Vadi / વાડી'],['crop','Crop / પાક'],['activityType','Activity Type / પ્રવૃત્તિ'],['desc','Activity / પ્રવૃત્તિ'],['unit','Unit / એકમ'],['rate','Rate / ભાવ'],['total','Total Amount / કુલ રકમ']]},
+  production:{route:'Production / Utaro',gu:'ઉતારો',group:'DAILY OPERATIONS',eyebrow:'PRODUCTION / ઉત્પાદન',title:'Production / Utaro / ઉતારો',
+    fields:[{k:'date',l:'Date / તારીખ',t:'date',req:1,d:todayISO},{k:'vadi',l:'Vadi / વાડી',t:'select',o:()=>names('vadis')},
+      {k:'crop',l:'Crop / પાક',t:'select',o:()=>names('crops'),req:1},{k:'qty',l:'Quantity / જથ્થો',t:'number',req:1,d:0},
+      {k:'unit',l:'એકમ',t:'select',o:['કિલો (kg)','ગ્રામ (g)','ક્વિન્ટલ','ટન','લિટર (L)','બોરી','પેકેટ','નંગ'],d:'કિલો (kg)'},
+      {k:'grade',l:'Grade / ગ્રેડ',t:'select',o:['A','B','C']},{k:'sellingRate',l:'Selling Rate / વેચાણ ભાવ',t:'number',d:0},
+      {k:'buyer',l:'Buyer / ખરીદનાર'},{k:'notes',l:'Notes / નોંધ',t:'textarea'}],
+    cols:[['date','Date / તારીખ'],['vadi','Vadi / વાડી'],['crop','Crop / પાક'],['qty','Quantity / જથ્થો'],['unit','Unit / એકમ'],['grade','Grade / ગ્રેડ'],['sellingRate','Selling Rate / વેચાણ ભાવ'],['buyer','Buyer / ખરીદનાર']]},
+  workers:{route:'Labour / Majur',gu:'મજૂર',group:'DAILY OPERATIONS',eyebrow:'LABOUR / મજૂર',title:'Labour / Majur Management / મજૂર વ્યવસ્થાપન',
+    fields:[{k:'name',l:'Worker Name / મજૂરનું નામ',req:1},{k:'mobile',l:'Mobile / મોબાઇલ',mobile:1},{k:'address',l:'Address / સરનામું'},
+      {k:'joinDate',l:'Joining Date / જોડાવાની તારીખ',t:'date'},{k:'rate',l:'Daily Rate / રોજનો દર',t:'number',d:0},
+      {k:'type',l:'પ્રકાર',t:'select',o:['દૈનિક મજૂર','લણણી મજૂર','વાવણી મજૂર','અન્ય','કરાર આધારિત']},
+      {k:'active',l:'સક્રિય',t:'select',o:['હા','ના'],d:'હા'},{k:'notes',l:'Notes / નોંધ',t:'textarea'}],
+    cols:[['name','Worker Name / મજૂરનું નામ'],['mobile','Mobile / મોબાઇલ'],['type','Type / પ્રકાર'],['rate','Daily Rate / રોજનો દર'],['active','Active / સક્રિય']],
+    notice:'Mobile field accepts exactly 10 digits — extra characters are blocked automatically as you type.'},
+  upads:{route:'Labour Payment',gu:'ઉપાડ',group:'DAILY OPERATIONS',eyebrow:'UPAD / ઉપાડ',title:'Upad / Advance & Payments / ઉપાડ',
+    fields:[{k:'date',l:'Date / તારીખ',t:'date',req:1,d:todayISO},{k:'worker',l:'Worker / મજૂર',t:'select',o:()=>names('workers'),req:1},
+      {k:'amount',l:'Amount / રકમ',t:'number',req:1,d:0},{k:'reason',l:'કારણ',t:'select',o:['ખર્ચી','વાપરવાના','ઉપાડ']},
+      {k:'method',l:'ચુકવણી પદ્ધતિ',t:'select',o:['રોકડ','બેંક ટ્રાન્સફર','UPI']},
+      {k:'notes',l:'Notes / નોંધ',t:'textarea'}],
+    cols:[['date','Date / તારીખ'],['worker','Worker / મજૂર'],['amount','Amount / રકમ'],['reason','Reason / કારણ'],['method','Payment Method / ચુકવણી']]},
+  incomes:{route:'Income / Aavak',gu:'આવક',group:'FINANCE',eyebrow:'FINANCE / નાણાં',title:'Income / Aavak',
+    fields:[{k:'date',l:'Date / તારીખ',t:'date',req:1,d:todayISO},{k:'crop',l:'Crop / પાક',t:'select',o:()=>names('crops')},
+      {k:'vadi',l:'Vadi / વાડી',t:'select',o:()=>names('vadis')},{k:'buyer',l:'Buyer / ખરીદનાર'},
+      {k:'qty',l:'Quantity / જથ્થો',t:'number',d:0},{k:'unit',l:'એકમ',t:'select',o:['કિલો (kg)','ક્વિન્ટલ','ટન','મણ','ગ્રામ (g)','બોરી','ગાંસડી']},{k:'rate',l:'Rate / ભાવ',t:'number',d:0},
+      {k:'total',l:'Total Amount / કુલ રકમ',t:'number',d:0},{k:'status',l:'ચુકવણી સ્થિતિ',t:'select',o:['ચૂકવેલ','બાકી'],d:'ચૂકવેલ'},
+      {k:'notes',l:'Notes / નોંધ',t:'textarea'}],
+    cols:[['date','Date / તારીખ'],['crop','Crop / પાક'],['vadi','Vadi / વાડી'],['qty','Quantity / જથ્થો'],['total','Total Amount / કુલ રકમ'],['status','Payment Status / સ્થિતિ']]},
+  expenses:{route:'Expenses / Kharch',gu:'ખર્ચ',group:'FINANCE',eyebrow:'FINANCE / નાણાં',title:'Expenses / Kharch',
+    fields:[{k:'date',l:'Date / તારીખ',t:'date',req:1,d:todayISO},
+      {k:'category',l:'Category / શ્રેણી',t:'select',req:1,o:['બીજ','ખાતર','દવા','મજૂરી','મજૂરી ઉપાડ','વીજળી','ડીઝલ','પેટ્રોલ','ટ્રેક્ટર','મશીનરી','સિંચાઈ','ટ્રાન્સપોર્ટ','મરામત','ભાડું','ફાર્મ મેન્ટેનન્સ','પેકેજિંગ','અન્ય']},
+      {k:'vadi',l:'Vadi / વાડી',t:'select',o:()=>names('vadis')},{k:'crop',l:'Crop / પાક',t:'select',o:()=>names('crops')},{k:'desc',l:'Description / વર્ણન'},
+      {k:'amount',l:'Amount / રકમ',t:'number',d:0},{k:'method',l:'ચુકવણી પદ્ધતિ',t:'select',o:['રોકડ','બેંક ટ્રાન્સફર','UPI']},
+      {k:'notes',l:'Notes / નોંધ',t:'textarea'}],
+    cols:[['date','Date / તારીખ'],['category','Category / શ્રેણી'],['vadi','Vadi / વાડી'],['crop','Crop / પાક'],['amount','Amount / રકમ'],['method','Payment Method / ચુકવણી']]},
+  seeds:{route:'Seeds',gu:'બીજ',group:'INVENTORY',eyebrow:'INVENTORY / સ્ટોક',title:'Seeds Inventory / બીજ સ્ટોક',
+    fields:[{k:'name',l:'Name / નામ',req:1},{k:'crop',l:'Crop / પાક',t:'select',o:()=>names('crops')},
+      {k:'qty',l:'Quantity / જથ્થો',t:'number',d:0},{k:'unit',l:'Unit / એકમ',t:'select',o:['મણ','કિલો (kg)','ગ્રામ (g)','પેકેટ','બોરી']},
+      {k:'cost',l:'Cost / કિંમત',t:'number',d:0},{k:'purchaseDate',l:'Purchase Date / ખરીદી તારીખ',t:'date'},
+      {k:'supplier',l:'Supplier / સપ્લાયર'},{k:'notes',l:'Notes / નોંધ',t:'textarea'}],
+    cols:[['name','Name / નામ'],['crop','Crop / પાક'],['qty','Quantity / જથ્થો'],['unit','Unit / એકમ'],['cost','Cost / કિંમત']]},
+  fertilizer:{route:'Fertilizer',gu:'ખાતર',group:'INVENTORY',eyebrow:'INVENTORY / સ્ટોક',title:'Fertilizer Inventory / ખાતર સ્ટોક',
+    fields:[{k:'name',l:'Name / નામ',req:1},{k:'crop',l:'Crop / પાક',t:'select',o:()=>names('crops')},
+      {k:'qty',l:'Quantity / જથ્થો',t:'number',d:0},{k:'unit',l:'Unit / એકમ',t:'select',o:['કિલો (kg)','ગ્રામ (g)','ક્વિન્ટલ','ટન','લિટર (L)','બોરી','પેકેટ','નંગ'],d:'કિલો (kg)'},
+      {k:'cost',l:'Cost / કિંમત',t:'number',d:0},{k:'purchaseDate',l:'Purchase Date / ખરીદી તારીખ',t:'date'},
+      {k:'supplier',l:'Supplier / સપ્લાયર'},{k:'notes',l:'Notes / નોંધ',t:'textarea'}],
+    cols:[['name','Name / નામ'],['crop','Crop / પાક'],['qty','Quantity / જથ્થો'],['unit','Unit / એકમ'],['cost','Cost / કિંમત']]},
+  pesticides:{route:'Pesticides',gu:'દવા',group:'INVENTORY',eyebrow:'INVENTORY / સ્ટોક',title:'Pesticides Inventory / દવા સ્ટોક',
+    fields:[{k:'name',l:'Name / નામ',req:1},{k:'crop',l:'Crop / પાક',t:'select',o:()=>names('crops')},
+      {k:'qty',l:'Quantity / જથ્થો',t:'number',d:0},{k:'unit',l:'Unit / એકમ',t:'select',o:['કિલો (kg)','ગ્રામ (g)','ક્વિન્ટલ','ટન','લિટર (L)','બોરી','પેકેટ','નંગ'],d:'કિલો (kg)'},
+      {k:'cost',l:'Cost / કિંમત',t:'number',d:0},{k:'purchaseDate',l:'Purchase Date / ખરીદી તારીખ',t:'date'},
+      {k:'supplier',l:'Supplier / સપ્લાયર'},{k:'notes',l:'Notes / નોંધ',t:'textarea'}],
+    cols:[['name','Name / નામ'],['crop','Crop / પાક'],['qty','Quantity / જથ્થો'],['unit','Unit / એકમ'],['cost','Cost / કિંમત']]}
+};
+const SOON = [];
+
+let activeKey='dashboard', editIndex=null;
+
+const ICO = (p)=>`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">${p}</svg>`;
+const NAV_ICON = {
+  dashboard: ICO('<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'),
+  farmOverview: ICO('<path d="M12 22c0-6 4-9 8-10-1 6-4 10-8 10z"/><path d="M12 22c0-6-4-9-8-10 1 6 4 10 8 10z"/><path d="M12 22V9"/>'),
+  vadis: ICO('<polygon points="1 6 8 3 16 6 23 3 23 18 16 21 8 18 1 21"/><line x1="8" y1="3" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="21"/>'),
+  crops: ICO('<circle cx="12" cy="6" r="3"/><circle cx="6" cy="16" r="3"/><circle cx="18" cy="16" r="3"/><line x1="12" y1="9" x2="8" y2="14"/><line x1="12" y1="9" x2="16" y2="14"/>'),
+  dailyEntries: ICO('<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>'),
+  production: ICO('<path d="M21 16V8a2 2 0 0 0-1-1.7l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.7l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.3 7 12 12 20.7 7"/><line x1="12" y1="22" x2="12" y2="12"/>'),
+  workers: ICO('<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'),
+  upads: ICO('<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8a2 2 0 0 0-2 2v2h12V5a2 2 0 0 0-2-2z"/><circle cx="17" cy="14" r="1.5"/>'),
+  incomes: ICO('<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="6" y1="15" x2="10" y2="15"/>'),
+  expenses: ICO('<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>'),
+  profitLoss: ICO('<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>'),
+  seeds: ICO('<path d="M11 20A7 7 0 0 1 4 13V8a1 1 0 0 1 1-1h1a7 7 0 0 1 7 7v1a6 6 0 0 1-2 5z"/><path d="M11 20v-9"/><path d="M15 9c0-3 2-5 5-5 0 3-2 5-5 5z"/>'),
+  fertilizer: ICO('<path d="M9 2v6l-5 8a3 3 0 0 0 3 5h10a3 3 0 0 0 3-5l-5-8V2"/><line x1="8" y1="2" x2="16" y2="2"/><line x1="9" y1="15" x2="15" y2="15"/>'),
+  pesticides: ICO('<path d="M12 2s6 7 6 12a6 6 0 0 1-12 0c0-5 6-12 6-12z"/>'),
+  cropAnalysis: ICO('<line x1="4" y1="20" x2="4" y2="12"/><line x1="10" y1="20" x2="10" y2="6"/><line x1="16" y1="20" x2="16" y2="14"/><line x1="22" y1="20" x2="22" y2="10"/><line x1="2" y1="20" x2="23" y2="20"/>'),
+  productionAnalysis: ICO('<path d="M12 2l3 2v4l-3 2-3-2V4z"/><path d="M5 9l3 2v4l-3 2-3-2v-4z" transform="translate(1,4)"/><path d="M19 9l3 2v4l-3 2-3-2v-4z" transform="translate(-1,4)"/>'),
+  yearlyReport: ICO('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/>'),
+  settings: ICO('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>')
+};
+function navRow(k,label,gu){ return `<div class="nav-item" data-k="${k}"><span style="display:flex;align-items:center;gap:8px;">${NAV_ICON[k]||''}<span>${label}</span></span> <span class="gu">${gu}</span></div>`; }
+function buildSidebar(){
+  const groups = {};
+  Object.entries(M).forEach(([k,m])=>{(groups[m.group]=groups[m.group]||[]).push([k,m]);});
+  let html = `<h4>DASHBOARD / ડેશબોર્ડ</h4>${navRow('dashboard','Farm Dashboard','ડેશબોર્ડ')}`;
+  html += `<h4>FARM / ખેતર</h4>${navRow('farmOverview','Farm Overview','ઝાંખી')}`;
+  (groups['FARM / ખેતર']||[]).forEach(([k,m])=>html+=navRow(k,m.route,m.gu));
+  html += `<h4>DAILY OPERATIONS / રોજિંદી કામગીરી</h4>`;
+  (groups['DAILY OPERATIONS']||[]).forEach(([k,m])=>html+=navRow(k,m.route,m.gu));
+  html += `<h4>FINANCE / નાણાં</h4>`;
+  (groups['FINANCE']||[]).forEach(([k,m])=>html+=navRow(k,m.route,m.gu));
+  html += navRow('profitLoss','Profit &amp; Loss','નફો-નુકસાન');
+  html += `<h4>INVENTORY / સ્ટોક</h4>`;
+  (groups['INVENTORY']||[]).forEach(([k,m])=>html+=navRow(k,m.route,m.gu));
+  html += `<h4>ANALYTICS / વિશ્લેષણ</h4>
+    ${navRow('cropAnalysis','Crop An...','પાક વિશ્લેષણ')}
+    ${navRow('productionAnalysis','Production A...','ઉત્પાદન')}
+    ${navRow('yearlyReport','Yearly Report','વાર્ષિક')}
+    <h4>SETTINGS / સેટિંગ્સ</h4>
+    ${navRow('settings','Settings','સેટિંગ્સ')}`;
+  SOON.forEach(s=>html+=`<div class="nav-item soon">${s}</div>`);
+  document.getElementById('sidebar').innerHTML = html;
+  document.querySelectorAll('.nav-item[data-k]').forEach(el=>el.addEventListener('click',()=>setActive(el.dataset.k)));
+}
+
+function setActive(k){
+  activeKey=k;
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const el=[...document.querySelectorAll('.nav-item')].find(n=>n.dataset.k===k);
+  if(el) el.classList.add('active');
+  render();
+}
+
+function fieldHTML(f,val){
+  val = val===undefined ? (f.d!==undefined?f.d:'') : val;
+  const req = f.req?' *':'';
+  let input;
+  if(f.t==='select'){
+    const opts = typeof f.o==='function'?f.o():(f.o||[]);
+    input = `<select id="fx_${f.k}"><option value="">Select...</option>${opts.map(o=>`<option ${o==val?'selected':''}>${o}</option>`).join('')}</select>`;
+  } else if(f.t==='textarea'){
+    input = `<textarea id="fx_${f.k}">${val}</textarea>`;
+  } else if(f.mobile){
+    input = `<input id="fx_${f.k}" inputmode="numeric" maxlength="10" placeholder="10 digit number" value="${val}" oninput="this.value=this.value.replace(/\\D/g,'').slice(0,10)"><div class="hint">Only digits, max 10 — auto-trimmed while typing.</div>`;
+  } else {
+    input = `<input id="fx_${f.k}" type="${f.t||'text'}" value="${val}">`;
+  }
+  return `<div class="field${f.t==='textarea'?' full':''}"><label>${f.l}${req}</label>${input}</div>`;
+}
+
+function openModal(key,idx){
+  editIndex = idx===undefined?null:idx;
+  const m = M[key];
+  document.getElementById('modalTitle').textContent = (editIndex===null?'Add / ઉમેરો ':'Edit / બદલો ') + m.title.split(' /')[0];
+  document.getElementById('modalNotice').innerHTML = m.notice?`<div class="notice">${m.notice}</div>`:'';
+  const row = editIndex!==null ? store(key)[editIndex] : {};
+  document.getElementById('modalFields').innerHTML = m.fields.map(f=>fieldHTML(f,row[f.k])).join('') + extraHTML(key);
+  document.getElementById('modalBg').classList.add('open');
+  document.getElementById('modalBg').dataset.key = key;
+  wireAuto(key);
+}
+function extraHTML(key){
+  if(key==='crops') return `<div class="field"><label>Expense / ખર્ચ (auto)</label><input id="calc_expense" disabled></div>
+    <div class="field"><label>Revenue / આવક (auto)</label><input id="calc_revenue" disabled></div>
+    <div class="field"><label>Profit / નફો (auto)</label><input id="calc_profit" disabled></div>`;
+  return '';
+}
+function wireAuto(key){
+  if(key==='incomes' || key==='dailyEntries'){
+    const q=document.getElementById('fx_qty'), r=document.getElementById('fx_rate'), t=document.getElementById('fx_total');
+    if(q&&r&&t){ t.readOnly=true; t.style.opacity=.7;
+      const upd=()=>{ t.value = ((+q.value||0)*(+r.value||0))||0; };
+      q.addEventListener('input',upd); r.addEventListener('input',upd); upd();
+    }
+  }
+  if(key==='crops'){
+    const ids=['seedCost','nurseryCost','labourCost','fertilizerCost','pesticideCost','irrigationCost','otherCost','actualProd','sellingRate'];
+    const upd=()=>{
+      const v=id=>+((document.getElementById('fx_'+id)||{}).value)||0;
+      const exp=v('seedCost')+v('nurseryCost')+v('labourCost')+v('fertilizerCost')+v('pesticideCost')+v('irrigationCost')+v('otherCost');
+      const rev=v('actualProd')*v('sellingRate');
+      document.getElementById('calc_expense').value=money(exp);
+      document.getElementById('calc_revenue').value=money(rev);
+      document.getElementById('calc_profit').value=money(rev-exp);
+    };
+    ids.forEach(id=>{const el=document.getElementById('fx_'+id); if(el) el.addEventListener('input',upd);});
+    upd();
+  }
+}
+function closeModal(){ document.getElementById('modalBg').classList.remove('open'); }
+
+function saveActive(){
+  const key = document.getElementById('modalBg').dataset.key;
+  const m = M[key];
+  const row = {};
+  for(const f of m.fields){
+    let v = document.getElementById('fx_'+f.k).value;
+    if(f.mobile) v = v.replace(/\D/g,'').slice(0,10);
+    if(f.req && !v){ alert(f.l+' is required'); return; }
+    if(f.mobile && v && v.length!==10){ alert('Mobile must be exactly 10 digits'); return; }
+    row[f.k] = v;
+  }
+  const rows = store(key);
+  if(editIndex!==null) rows[editIndex]=row; else rows.push(row);
+  save(key,rows);
+  closeModal();
+  render();
+}
+function delRow(key,i){ const rows=store(key); rows.splice(i,1); save(key,rows); render(); }
+
+function renderModulePage(key){
+  const m = M[key];
+  const rows = store(key);
+  if(m.calc) rows.forEach(m.calc);
+  const cols = m.cols;
+  document.getElementById('main').innerHTML = `
+    <div class="eyebrow">${m.eyebrow}</div><h1>${m.title}</h1>
+    <div class="sub">UMIYA FARM — ${todayStr}</div>
+    ${m.notice?`<div class="notice">${m.notice}</div>`:''}
+    <div class="panel">
+      <div class="panel-head"><h3>${rows.length} records / રેકોર્ડ</h3><button class="btn" onclick="openModal('${key}')">+ Add / ઉમેરો</button></div>
+      <input class="search" placeholder="Search / શોધો ${m.route.toLowerCase()}..." oninput="filterRows(this,'${key}')">
+      <table><thead><tr>${cols.map(c=>`<th>${c[1]}</th>`).join('')}<th>Actions / ક્રિયા</th></tr></thead>
+      <tbody id="rows_${key}">${rowsHTML(key,rows,cols)}</tbody></table>
+      ${rows.length===0?'<div class="empty">No records found / કોઈ રેકોર્ડ નથી</div>':''}
+    </div>
+    <div class="foot">© 2026 UMIYA FARM · Developed by sumit haripara</div>`;
+}
+function rowsHTML(key,rows,cols){
+  return rows.map((r,i)=>`<tr>${cols.map(c=>`<td>${r[c[0]]||'—'}</td>`).join('')}
+    <td class="actions"><button onclick="openModal('${key}',${i})">✏️</button><button onclick="delRow('${key}',${i})">🗑</button></td></tr>`).join('');
+}
+function filterRows(input,key){
+  const q=input.value.toLowerCase();
+  const m=M[key]; let rows=store(key); if(m.calc) rows.forEach(m.calc);
+  const filtered = rows.filter(r=>JSON.stringify(r).toLowerCase().includes(q));
+  document.getElementById('rows_'+key).innerHTML = rowsHTML(key,filtered,m.cols);
+}
+
+function renderDashboard(){
+  const inc=store('incomes'), exp=store('expenses'), prod=store('production'), work=store('workers');
+  const todayInc = inc.filter(r=>r.date===todayISO).reduce((s,r)=>s+(+r.total||0),0);
+  const todayExp = exp.filter(r=>r.date===todayISO).reduce((s,r)=>s+(+r.amount||0),0);
+  const todayProd = prod.filter(r=>r.date===todayISO).reduce((s,r)=>s+(+r.qty||0),0);
+  const labourCost = work.filter(w=>w.active!=='ના' && w.active!=='false').reduce((s,w)=>s+(+w.rate||0),0);
+  const totInc = inc.reduce((s,r)=>s+(+r.total||0),0);
+  const totExp = exp.reduce((s,r)=>s+(+r.amount||0),0);
+  const totProd = prod.reduce((s,r)=>s+(+r.qty||0),0);
+
+  const card=(icon,bg,gu,label,val,cls)=>`<div class="card ${cls||''}"><div class="card-top"><div class="icon" style="background:${bg}">${icon}</div><span class="gu">${gu}</span></div><div class="label">${label}</div><div class="val">${val}</div></div>`;
+
+  const now=new Date(); const monthsBack=[...Array(6)].map((_,i)=>{const d=new Date(now.getFullYear(),now.getMonth()-(5-i),1);return d;});
+  const barVals = monthsBack.map(d=>{
+    const mi = inc.filter(r=>{const rd=new Date(r.date);return r.date && rd.getFullYear()===d.getFullYear() && rd.getMonth()===d.getMonth();}).reduce((s,r)=>s+(+r.total||0),0);
+    const me = exp.filter(r=>{const rd=new Date(r.date);return r.date && rd.getFullYear()===d.getFullYear() && rd.getMonth()===d.getMonth();}).reduce((s,r)=>s+(+r.amount||0),0);
+    return {label:d.toLocaleDateString('en',{month:'short'}), val:mi-me};
+  });
+
+  const byCat={}; exp.forEach(e=>{byCat[e.category||'અન્ય']=(byCat[e.category||'અન્ય']||0)+(+e.amount||0);});
+  const catRows=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
+  const ieSeries=[
+    {name:'Income',color:'#3b82f6',values:barVals.map(()=>0)},
+    {name:'Expense / ખર્ચ',color:'#ef4444',values:barVals.map(()=>0)},
+    {name:'Profit / નફો',color:'#eab308',values:barVals.map(b=>b.val)}
+  ];
+  const ieMonths=monthsBack.map(d=>({
+    income: inc.filter(r=>{const rd=new Date(r.date);return r.date && rd.getFullYear()===d.getFullYear() && rd.getMonth()===d.getMonth();}).reduce((s,r)=>s+(+r.total||0),0),
+    expense: exp.filter(r=>{const rd=new Date(r.date);return r.date && rd.getFullYear()===d.getFullYear() && rd.getMonth()===d.getMonth();}).reduce((s,r)=>s+(+r.amount||0),0)
+  }));
+  ieSeries[0].values=ieMonths.map(m=>m.income); ieSeries[1].values=ieMonths.map(m=>m.expense);
+
+  document.getElementById('main').innerHTML = `
+    <div class="eyebrow">EXECUTIVE OVERVIEW / એક્ઝિક્યુટિવ ઝાંખી</div><h1>Farm Dashboard / ફાર્મ ડેશબોર્ડ</h1>
+    <div class="sub">UMIYA FARM — ${todayStr}</div>
+    <div class="grid4">
+      ${card('💰','#3d3410','આજની આવક',"Today's Income / આજની આવક",money(todayInc))}
+      ${card('🐷','#3d1a1a','આજનો ખર્ચ',"Today's Expenses / આજનો ખર્ચ",money(todayExp))}
+      ${card('📦','#12243d','ઉત્પાદન',"Today's Production / આજનું ઉત્પાદન",todayProd+' kg')}
+      ${card('👥','#241541','મજૂરી',"Today's Labour Cost / આજની મજૂરી",money(labourCost))}
+      ${card('📉','#241a10','કુલ ખર્ચ',"Total Farm Expenses / કુલ ખર્ચ",money(totExp))}
+      ${card('📈','#0f2e1c','કુલ આવક',"Total Farm Income / કુલ આવક",money(totInc),'green')}
+      ${card('📈','#0f2e1c','નફો',"Current Profit / હાલનો નફો",money(totInc-totExp),totInc-totExp<0?'red':'green')}
+      ${card('🌾','#12243d','ઉતારો',"Total Production / કુલ ઉત્પાદન",totProd+' kg')}
+    </div>
+    <div style="margin-bottom:18px;">
+      <button class="qbtn" onclick="openModal('production')">📦 Quick Production / ઝડપી ઉત્પાદન</button>
+      <button class="qbtn" onclick="openModal('incomes')">💳 Quick Income / ઝડપી આવક</button>
+      <button class="qbtn" onclick="openModal('expenses')">🔄 Quick Expense / ઝડપી ખર્ચ</button>
+      <button class="qbtn" onclick="openModal('upads')">👤 Quick Upad / ઝડપી ઉપાડ</button>
+      <button class="btn" onclick="setActive('dailyEntries')">→ Daily Entry / રોજની નોંધ</button>
+    </div>
+    <div class="chartrow">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Income vs Expense / આવક વિ ખર્ચ</h3><div class="hint">Last 6 months / છેલ્લા 6 મહિના</div></div><b style="color:#3b82f6">${money(totInc)}</b></div>
+        ${multiLineChartSVG(barVals.map(b=>b.label),ieSeries)}
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Expense Breakdown / ખર્ચની વિગત</h3><div class="hint">By category / શ્રેણી પ્રમાણે</div></div><b style="color:var(--red)">${money(totExp)}</b></div>
+        ${catRows.length?catRows.map(([c,v])=>`<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span>${c}</span><b>${money(v)}</b></div><div style="background:var(--panel2);border-radius:6px;height:8px;"><div style="background:var(--yellow);height:8px;border-radius:6px;width:${totExp?Math.round(v/totExp*100):0}%;"></div></div></div>`).join(''):'<div class="empty">No expense data yet / હજુ ખર્ચની માહિતી નથી</div>'}
+      </div>
+    </div>
+    <div class="foot">© 2026 UMIYA FARM · Developed by sumit haripara</div>`;
+}
+
+function renderFarmOverview(){
+  const vadis=store('vadis'), crops=store('crops'), inc=store('incomes'), exp=store('expenses');
+  crops.forEach(M.crops.calc);
+  const growing = crops.filter(c=>c.status==='વધતો પાક' || c.status==='Growing');
+  const now=new Date(); const monthsBack=[...Array(6)].map((_,i)=>new Date(now.getFullYear(),now.getMonth()-(5-i),1));
+  const barVals = monthsBack.map(d=>{
+    const mi = inc.filter(r=>{const rd=new Date(r.date);return r.date && rd.getFullYear()===d.getFullYear() && rd.getMonth()===d.getMonth();}).reduce((s,r)=>s+(+r.total||0),0);
+    const me = exp.filter(r=>{const rd=new Date(r.date);return r.date && rd.getFullYear()===d.getFullYear() && rd.getMonth()===d.getMonth();}).reduce((s,r)=>s+(+r.amount||0),0);
+    return {label:d.toLocaleDateString('en',{month:'short'}), val:mi-me};
+  });
+  const maxBar = Math.max(1,...barVals.map(b=>Math.abs(b.val)));
+  const totProfit = inc.reduce((s,r)=>s+(+r.total||0),0) - exp.reduce((s,r)=>s+(+r.amount||0),0);
+  document.getElementById('main').innerHTML = `
+    <div class="eyebrow">FARM OVERVIEW / ફાર્મ ઝાંખી</div><h1>Farm Overview / ફાર્મ ઝાંખી</h1>
+    <div class="sub">UMIYA FARM — ${todayStr}</div>
+    <div class="grid">
+      <div class="card"><div class="label">Total Vadis / કુલ વાડી</div><div class="val">${vadis.length}</div></div>
+      <div class="card"><div class="label">Total Area / કુલ ક્ષેત્રફળ</div><div class="val">${vadis.reduce((s,v)=>s+(+v.area||0),0)}</div></div>
+      <div class="card"><div class="label">Total Crops / કુલ પાક</div><div class="val">${crops.length}</div></div>
+      <div class="card"><div class="label">Growing Now / ચાલુ પાક</div><div class="val">${growing.length}</div></div>
+    </div>
+    <div class="panel"><div class="panel-head"><h3>My Fields / Vadi / મારી વાડી</h3><span class="hint">Manage in Fields / Vadi</span></div>
+      <div class="grid">${vadis.length? vadis.map(v=>`<div class="card"><b>${v.name}</b><div class="hint">${v.area||0} ${v.areaUnit||''} · Soil: ${v.soil||'—'}</div></div>`).join('') : '<div class="empty">No fields yet / હજુ કોઈ વાડી નથી</div>'}</div>
+    </div>
+    <div class="chartrow">
+      <div class="panel">
+        <div class="panel-head"><div><h3>Monthly Profit / માસિક નફો</h3><div class="hint">Last 6 months / છેલ્લા 6 મહિના</div></div><b style="color:var(--yellow)">${money(totProfit)}</b></div>
+        <div class="bars">${barVals.map(b=>`<div class="b"><div class="bfill" style="background:var(--yellow);height:${Math.round(Math.abs(b.val)/maxBar*100)}%"></div><div class="blabel">${b.label}</div></div>`).join('')}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Active Crops / ચાલુ પાક</h3><div class="hint">${growing.length} growing / ચાલુ</div></div><a href="#" onclick="setActive('crops');return false;" style="color:var(--yellow);font-size:13px;">View all</a></div>
+        ${growing.length? growing.map(c=>`<div style="display:flex;justify-content:space-between;align-items:center;background:var(--panel2);border-radius:8px;padding:10px 14px;margin-bottom:8px;">
+          <div style="display:flex;gap:10px;align-items:center;"><div style="width:34px;height:34px;border-radius:8px;background:#0f2e1c;display:flex;align-items:center;justify-content:center;">🧬</div>
+          <div><b>${c.name}</b><div class="hint">${c.vadi||'—'} · ${c.area||0} ${c.areaUnit||''}</div></div></div>
+          <div style="text-align:right;"><div class="hint">Selling ₹/${c.prodUnit||'kg'}</div><b>${c.sellingRate||0}</b></div>
+        </div>`).join('') : '<div class="empty">No active crops / હજુ કોઈ પાક નથી</div>'}
+      </div>
+    </div>
+    <div class="foot">© 2026 UMIYA FARM · Developed by sumit haripara</div>`;
+}
+
+function renderProfitLoss(){
+  const inc=store('incomes'), exp=store('expenses'), crops=store('crops'), upads=store('upads');
+  const totInc = inc.reduce((s,r)=>s+(+r.total||0),0);
+  const totExp = exp.reduce((s,r)=>s+(+r.amount||0),0);
+  const num=v=>+v||0;
+  const labourCost=crops.reduce((s,c)=>s+num(c.labourCost),0);
+  const seedCost=crops.reduce((s,c)=>s+num(c.seedCost),0);
+  const fertCost=crops.reduce((s,c)=>s+num(c.fertilizerCost),0);
+  const pestCost=crops.reduce((s,c)=>s+num(c.pesticideCost),0);
+  const irrCost=crops.reduce((s,c)=>s+num(c.irrigationCost),0);
+  const transportCost=exp.filter(e=>e.category==='ટ્રાન્સપોર્ટ' || e.category==='Transport').reduce((s,e)=>s+num(e.amount),0);
+  const otherExp = totExp - (labourCost+seedCost+fertCost+pestCost+irrCost+transportCost);
+  const upadGiven = upads.reduce((s,u)=>s+num(u.amount),0);
+  const netProfit = totInc-totExp;
+  const row=(en,gu,val,neg)=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;">
+    <span style="color:var(--muted);">— ${en} / <span>${gu}</span></span><b style="${neg?'color:var(--red)':''}">${money(val)}</b></div>`;
+  const byCat={}; exp.forEach(e=>{byCat[e.category||'અન્ય']=(byCat[e.category||'અન્ય']||0)+num(e.amount);});
+  const catRows=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const yr=new Date().getFullYear();
+  const monthSeries=[
+    {name:'Income',color:'#3b82f6',values:months.map((_,i)=>inc.filter(r=>{const d=new Date(r.date);return r.date && d.getFullYear()===yr && d.getMonth()===i;}).reduce((s,r)=>s+num(r.total),0))},
+    {name:'Expense / ખર્ચ',color:'#ef4444',values:months.map((_,i)=>exp.filter(r=>{const d=new Date(r.date);return r.date && d.getFullYear()===yr && d.getMonth()===i;}).reduce((s,r)=>s+num(r.amount),0))}
+  ];
+  document.getElementById('main').innerHTML = `
+    <div class="eyebrow">FINANCE / નાણાં</div><h1>Profit &amp; Loss / નફો-નુકસાન</h1>
+    <div class="sub">UMIYA FARM — ${todayStr}</div>
+    <div style="margin-bottom:14px;">Year / વર્ષ: <b>${yr}</b></div>
+    <div class="grid">
+      <div class="card green"><div class="card-top"><div class="icon" style="background:#0f2e1c;">💳</div></div><div class="label">Total Income / કુલ આવક</div><div class="val">${money(totInc)}</div></div>
+      <div class="card red"><div class="card-top"><div class="icon" style="background:#3d1a1a;">🔄</div></div><div class="label">Total Expenses / કુલ ખર્ચ</div><div class="val">${money(totExp)}</div></div>
+      <div class="card ${netProfit<0?'red':'green'}"><div class="card-top"><div class="icon" style="background:#3d3410;">📈</div></div><div class="label">NET PROFIT / નફો</div><div class="val">${money(netProfit)}</div></div>
+    </div>
+    <div class="panel"><div class="panel-head"><h3>Expense Breakdown / ખર્ચની વિગત</h3><div class="hint">Financial year / નાણાકીય વર્ષ ${yr}</div></div>
+      ${catRows.length?catRows.map(([c,v])=>`<div style="background:var(--panel2);border-radius:8px;padding:10px 14px;margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px;"><span>${c}</span><span>${totExp?Math.round(v/totExp*100):0}%</span></div><b>${money(v)}</b></div>`).join(''):'<div class="empty">No expense data yet / હજુ ખર્ચની માહિતી નથી</div>'}
+    </div>
+    <div class="panel"><div class="panel-head"><h3>Monthly Income vs Expense / માસિક આવક વિ ખર્ચ</h3><div class="hint">Year ${yr}</div></div>
+      ${barChartSVG(months,monthSeries)}
+      <div style="text-align:center;margin-top:4px;font-size:12px;"><span style="color:#3b82f6;">■ Income</span> &nbsp; <span style="color:#ef4444;">■ Expense</span></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3>Profit &amp; Loss Statement / નફા-નુકસાન પત્રક</h3><div class="hint">Year ${yr}</div></div>
+      <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-weight:700;">
+        <span>Total Income / કુલ આવક</span><span style="color:var(--green);">${money(totInc)}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-weight:700;margin-bottom:6px;">
+        <span>Total Expenses / કુલ ખર્ચ</span><span style="color:var(--red);">${money(totExp)}</span></div>
+      ${row('Labour Cost','મજૂરી',labourCost)}
+      ${row('Seed Cost','બીજ',seedCost)}
+      ${row('Fertilizer Cost','ખાતર',fertCost)}
+      ${row('Pesticide Cost','દવા',pestCost)}
+      ${row('Irrigation Cost','સિંચાઈ',irrCost)}
+      ${row('Transport Cost','ટ્રાન્સપોર્ટ',transportCost)}
+      ${row('Other Expenses','અન્ય',otherExp,otherExp<0)}
+      ${row('Upad Given','ઉપાડ',upadGiven)}
+      <div style="display:flex;justify-content:space-between;padding-top:14px;font-weight:700;font-size:16px;">
+        <span>NET PROFIT / નફો</span><span style="color:var(--yellow);">${money(netProfit)}</span></div>
+    </div>
+    <div class="foot">© 2026 UMIYA FARM · Developed by sumit haripara</div>`;
+}
+
+function renderCropAnalysis(){
+  const crops=store('crops'); crops.forEach(M.crops.calc);
+  const num=s=>parseFloat((s||'₹0').replace(/[₹,]/g,''))||0;
+  const rows=[...crops].sort((a,b)=>num(b._profit)-num(a._profit));
+  const maxV=Math.max(1,...rows.flatMap(r=>[num(r._revenue),num(r._expense),Math.abs(num(r._profit))]));
+  document.getElementById('main').innerHTML = `
+    <div class="eyebrow">ANALYTICS / વિશ્લેષણ</div><h1>Crop Analysis / પાક વિશ્લેષણ</h1>
+    <div class="sub">UMIYA FARM — ${todayStr}</div>
+    <div class="grid4">
+      <div class="card"><div class="card-top"><div class="icon" style="background:#3d3410;">🌾</div></div><div class="label">Total Crops / કુલ પાક</div><div class="val">${crops.length}</div></div>
+      <div class="card green"><div class="card-top"><div class="icon" style="background:#0f2e1c;">💲</div></div><div class="label">Total Revenue / કુલ આવક</div><div class="val">${money(rows.reduce((s,r)=>s+num(r._revenue),0))}</div></div>
+      <div class="card red"><div class="card-top"><div class="icon" style="background:#3d1a1a;">📦</div></div><div class="label">Total Expense / કુલ ખર્ચ</div><div class="val">${money(rows.reduce((s,r)=>s+num(r._expense),0))}</div></div>
+      <div class="card"><div class="card-top"><div class="icon" style="background:#12243d;">📈</div></div><div class="label">Total Profit / કુલ નફો</div><div class="val">${money(rows.reduce((s,r)=>s+num(r._profit),0))}</div></div>
+    </div>
+    <div class="panel"><div class="panel-head"><h3>Crop-wise Comparison / પાક પ્રમાણે સરખામણી</h3><div class="hint">Revenue vs Expense vs Profit / આવક વિ ખર્ચ વિ નફો</div></div>
+      <div style="display:flex;align-items:flex-end;gap:24px;height:160px;overflow-x:auto;padding:0 4px;">
+        ${rows.length?rows.map(r=>`<div style="display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;min-width:70px;">
+          <div style="display:flex;gap:3px;align-items:flex-end;height:130px;">
+            <div title="Revenue" style="width:14px;background:#3b82f6;border-radius:3px 3px 0 0;height:${Math.max(2,num(r._revenue)/maxV*130)}px;"></div>
+            <div title="Expense" style="width:14px;background:#ef4444;border-radius:3px 3px 0 0;height:${Math.max(2,num(r._expense)/maxV*130)}px;"></div>
+            <div title="Profit" style="width:14px;background:var(--yellow);border-radius:3px 3px 0 0;height:${Math.max(2,Math.abs(num(r._profit))/maxV*130)}px;"></div>
+          </div><span class="hint">${r.name}</span></div>`).join(''):'<div class="empty">No crops yet / હજુ કોઈ પાક નથી</div>'}
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--muted);">🔵 Revenue &nbsp; 🔴 Expense &nbsp; 🟡 Profit</div>
+    </div>
+    <div class="panel"><div class="panel-head"><h3>Crop-wise Profit / પાક પ્રમાણે નફો</h3><div class="hint">Profit distribution / નફાની વહેંચણી</div></div>
+      ${(()=>{ const positives=rows.filter(r=>num(r._profit)>0); const totalP=positives.reduce((s,r)=>s+num(r._profit),0);
+        if(!positives.length) return '<div class="empty">No profitable crops yet / હજુ નફાકારક પાક નથી</div>';
+        const colors=['#eab308','#3b82f6','#22c55e','#ef4444','#a855f7','#06b6d4','#f97316'];
+        let acc=0; const segs=positives.map((r,i)=>{const pct=totalP?num(r._profit)/totalP*100:0; const seg=`${colors[i%colors.length]} ${acc}% ${acc+pct}%`; acc+=pct; return seg;});
+        return `<div style="display:flex;align-items:center;gap:28px;flex-wrap:wrap;">
+          <div style="width:180px;height:180px;border-radius:50%;background:conic-gradient(${segs.join(',')});display:flex;align-items:center;justify-content:center;">
+            <div style="width:70%;height:70%;border-radius:50%;background:var(--panel);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--yellow);">${money(totalP)}</div>
+          </div>
+          <div>${positives.map((r,i)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px;"><span style="width:10px;height:10px;border-radius:2px;background:${colors[i%colors.length]};display:inline-block;"></span>${r.name}</div>`).join('')}</div>
+        </div>`; })()}
+    </div>
+    <div class="panel"><div class="panel-head"><h3>Crop-wise Profitability / પાક પ્રમાણે નફો</h3></div>
+      <table><thead><tr><th>Crop / પાક</th><th>Vadi / વાડી</th><th>Status / સ્થિતિ</th><th>Expense / ખર્ચ</th><th>Revenue / આવક</th><th>Profit / નફો</th></tr></thead>
+      <tbody>${rows.length?rows.map(r=>`<tr><td>${r.name}</td><td>${r.vadi||'—'}</td><td>${r.status||'—'}</td><td>${r._expense}</td><td>${r._revenue}</td><td>${r._profit}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">No crops yet / હજુ કોઈ પાક નથી</td></tr>'}</tbody></table>
+    </div>
+    <div class="foot">© 2026 UMIYA FARM · Developed by sumit haripara</div>`;
+}
+function renderProductionAnalysis(){
+  const prod=store('production');
+  const byCrop={}, byVadi={};
+  prod.forEach(p=>{const c=p.crop||'Unspecified';byCrop[c]=(byCrop[c]||0)+(+p.qty||0);
+    const v=p.vadi||'Unspecified';byVadi[v]=(byVadi[v]||0)+(+p.qty||0);});
+  const cropRows=Object.entries(byCrop).sort((a,b)=>b[1]-a[1]);
+  const vadiRows=Object.entries(byVadi).sort((a,b)=>b[1]-a[1]);
+  const total=prod.reduce((s,p)=>s+(+p.qty||0),0);
+  const yr=new Date().getFullYear();
+  const monthQty=[...Array(12)].map((_,i)=>prod.filter(p=>{const d=new Date(p.date);return p.date && d.getFullYear()===yr && d.getMonth()===i;}).reduce((s,p)=>s+(+p.qty||0),0));
+  const maxM=Math.max(1,...monthQty);
+  const pts=monthQty.map((v,i)=>`${(i/11*280).toFixed(1)},${(60-(v/maxM*55)).toFixed(1)}`).join(' ');
+  const monthsLbl=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const totalValue = prod.reduce((s,p)=>s+(+p.qty||0)*(+p.sellingRate||0),0);
+  const avgRate = prod.length? Math.round(prod.reduce((s,p)=>s+(+p.sellingRate||0),0)/prod.length):0;
+  const vadiCount = store('vadis').length;
+  document.getElementById('main').innerHTML = `
+    <div class="eyebrow">ANALYTICS / વિશ્લેષણ</div><h1>Production Analysis / ઉત્પાદન વિશ્લેષણ</h1>
+    <div class="sub">UMIYA FARM — ${todayStr}</div>
+    <div class="grid4">
+      <div class="card"><div class="card-top"><div class="icon" style="background:#3d3410;">📦</div></div><div class="label">Total Production / કુલ ઉત્પાદન</div><div class="val">${total} kg</div></div>
+      <div class="card"><div class="card-top"><div class="icon" style="background:#0f2e1c;">💲</div></div><div class="label">Total Value / કુલ કિંમત</div><div class="val">${money(totalValue)}</div></div>
+      <div class="card"><div class="card-top"><div class="icon" style="background:#12243d;">📈</div></div><div class="label">Avg Rate/kg / સરેરાશ ભાવ</div><div class="val">${money(avgRate)}</div></div>
+      <div class="card"><div class="card-top"><div class="icon" style="background:#241541;">🗺️</div></div><div class="label">Vadis / વાડી</div><div class="val">${vadiCount}</div></div>
+    </div>
+    <div class="chartrow">
+      <div class="panel"><div class="panel-head"><h3>Production by Crop / પાક પ્રમાણે ઉત્પાદન</h3><div class="hint">kg</div></div>
+        ${cropRows.length?cropRows.map(([c,v])=>`<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span>${c}</span><b>${v} kg</b></div><div style="background:var(--panel2);border-radius:6px;height:8px;"><div style="background:var(--yellow);height:8px;border-radius:6px;width:${total?Math.round(v/total*100):0}%;"></div></div></div>`).join(''):'<div class="empty">No production entries yet / હજુ ઉત્પાદન નોંધાયું નથી</div>'}
+      </div>
+      <div class="panel"><div class="panel-head"><h3>Production Trend / માસિક વલણ</h3><div class="hint">Monthly kg</div></div>
+        <svg viewBox="0 0 290 70" style="width:100%;height:140px;">
+          <polyline points="${pts}" fill="none" stroke="#3b82f6" stroke-width="2"/>
+          ${monthQty.map((v,i)=>`<circle cx="${(i/11*280).toFixed(1)}" cy="${(60-(v/maxM*55)).toFixed(1)}" r="2.5" fill="#3b82f6"/>`).join('')}
+        </svg>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);">${monthsLbl.map(m=>`<span>${m}</span>`).join('')}</div>
+      </div>
+    </div>
+    <div class="panel"><div class="panel-head"><h3>Production by Vadi / વાડી પ્રમાણે ઉત્પાદન</h3><div class="hint">kg per field</div></div>
+      ${vadiRows.length?vadiRows.map(([c,v])=>`<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span>${c}</span><b>${v} kg</b></div><div style="background:var(--panel2);border-radius:6px;height:8px;"><div style="background:#3b82f6;height:8px;border-radius:6px;width:${total?Math.round(v/total*100):0}%;"></div></div></div>`).join(''):'<div class="empty">No production entries yet / હજુ ઉત્પાદન નોંધાયું નથી</div>'}
+    </div>
+    <div class="foot">© 2026 UMIYA FARM · Developed by sumit haripara</div>`;
+}
+let reportYear = new Date().getFullYear();
+function renderYearlyReport(){
+  const allInc=store('incomes'), allExp=store('expenses'), allProd=store('production');
+  const cur=new Date().getFullYear();
+  const years=[cur-2,cur-1,cur,cur+1].map(String);
+  const yr=reportYear;
+  const inc=allInc.filter(r=>(r.date||'').startsWith(yr));
+  const exp=allExp.filter(r=>(r.date||'').startsWith(yr));
+  const prod=allProd.filter(r=>(r.date||'').startsWith(yr));
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const rows=months.map((mn,i)=>{
+    const mi=inc.filter(r=>new Date(r.date).getMonth()===i).reduce((s,r)=>s+(+r.total||0),0);
+    const me=exp.filter(r=>new Date(r.date).getMonth()===i).reduce((s,r)=>s+(+r.amount||0),0);
+    const mp=prod.filter(r=>new Date(r.date).getMonth()===i).reduce((s,r)=>s+(+r.qty||0),0);
+    return {mn,mi,me,mp};
+  });
+  const totInc=inc.reduce((s,r)=>s+(+r.total||0),0), totExp=exp.reduce((s,r)=>s+(+r.amount||0),0);
+  const totProd=prod.reduce((s,r)=>s+(+r.qty||0),0);
+  const byCrop={}; prod.forEach(p=>{byCrop[p.crop||'Unspecified']=(byCrop[p.crop||'Unspecified']||0)+(+p.qty||0);});
+  const topCrops=Object.entries(byCrop).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  document.getElementById('main').innerHTML = `
+    <div class="eyebrow">ANALYTICS / વિશ્લેષણ</div><h1>Yearly Report / વાર્ષિક રિપોર્ટ</h1>
+    <div class="sub">UMIYA FARM — ${todayStr}</div>
+    <div style="margin-bottom:14px;">Year / વર્ષ: <select id="yrSel" style="background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:8px;">${years.map(y=>`<option ${+y===yr?'selected':''}>${y}</option>`).join('')}</select></div>
+    <div class="grid">
+      <div class="card green"><div class="card-top"><div class="icon" style="background:#0f2e1c;">💰</div></div><div class="label">Year Income / વર્ષની આવક</div><div class="val">${money(totInc)}</div></div>
+      <div class="card red"><div class="card-top"><div class="icon" style="background:#3d1a1a;">📦</div></div><div class="label">Year Expenses / વર્ષનો ખર્ચ</div><div class="val">${money(totExp)}</div></div>
+      <div class="card ${totInc-totExp<0?'red':'green'}"><div class="card-top"><div class="icon" style="background:#3d3410;">🌾</div></div><div class="label">Net Profit / નફો</div><div class="val">${money(totInc-totExp)}</div></div>
+      <div class="card"><div class="card-top"><div class="icon" style="background:#12243d;">📦</div></div><div class="label">Total Production / કુલ ઉત્પાદન</div><div class="val">${totProd} kg</div></div>
+    </div>
+    <div class="panel"><div class="panel-head"><h3>Monthly Breakdown / માસિક વિગત</h3><div class="hint">Year ${yr}</div></div>
+      <table><thead><tr><th>Month / મહિનો</th><th>Income / આવક</th><th>Expense / ખર્ચ</th><th>Profit / નફો</th><th>Production (kg) / ઉત્પાદન</th></tr></thead>
+      <tbody>${rows.map(r=>`<tr><td>${r.mn}</td><td style="color:var(--green);">${money(r.mi)}</td><td style="color:var(--red);">${money(r.me)}</td><td style="color:var(--yellow);">${money(r.mi-r.me)}</td><td>${r.mp}</td></tr>`).join('')}
+      <tr style="font-weight:700;background:var(--panel2);"><td>TOTAL / કુલ</td><td style="color:var(--green);">${money(totInc)}</td><td style="color:var(--red);">${money(totExp)}</td><td style="color:var(--yellow);">${money(totInc-totExp)}</td><td>${totProd}</td></tr>
+      </tbody></table>
+    </div>
+    <div class="panel"><div class="panel-head"><h3>Top Crops (${yr}) / ટોપ પાક</h3></div>
+      ${topCrops.length?`<table><thead><tr><th>Crop / પાક</th><th>Total Production / કુલ ઉત્પાદન</th></tr></thead><tbody>${topCrops.map(([c,v])=>`<tr><td>${c}</td><td>${v} kg</td></tr>`).join('')}</tbody></table>`:'<div class="empty">No production yet / હજુ ઉત્પાદન નથી</div>'}
+    </div>
+    <div class="foot">© 2026 UMIYA FARM · Developed by sumit haripara</div>`;
+  document.getElementById('yrSel').addEventListener('change',e=>{reportYear=+e.target.value;renderYearlyReport();});
+}
+const EXPORT_ENTITIES = [['vadis','Vadi / વાડી'],['crops','Crop / પાક'],['production','Production / ઉત્પાદન'],['incomes','Income / આવક'],
+  ['expenses','Expense / ખર્ચ'],['workers','Worker / મજૂર'],['attendance','Attendance / હાજરી'],['upads','Upad / ઉપાડ'],
+  ['dailyEntries','DailyEntry / રોજની નોંધ'],['seeds','Seed / બીજ'],['fertilizer','Fertilizer / ખાતર'],['pesticides','Pesticide / દવા']];
+
+function toCSV(rows){
+  if(!rows.length) return '';
+  const keys=[...new Set(rows.flatMap(r=>Object.keys(r)))];
+  const esc=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  return keys.join(',')+'\n'+rows.map(r=>keys.map(k=>esc(r[k])).join(',')).join('\n');
+}
+function downloadCSV(name,rows){
+  const csv=toCSV(rows);
+
+  const bom = '\uFEFF';
+
+  const blob = new Blob(
+    [bom + (csv || 'No data')],
+    {type:'text/csv;charset=utf-8'}
+  );
+
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=name+'.csv';
+
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+function exportOne(key,label){ downloadCSV(label, store(key)); }
+function exportAll(){ EXPORT_ENTITIES.forEach(([k,l])=>downloadCSV(l, store(k))); }
+
+function renderSettings(){
+  const t = localStorage.getItem('agritech_theme') || 'dark';
+  document.getElementById('main').innerHTML = `
+    <div class="eyebrow">ADMINISTRATION / વ્યવસ્થાપન</div><h1>Settings / સેટિંગ્સ</h1>
+    <div class="sub">UMIYA FARM — ${todayStr}</div>
+    <div class="panel">
+      <div class="panel-head"><h3>Data Overview / માહિતી ઝાંખી<div class="hint" style="font-weight:400;">Records per entity / એકમ પ્રમાણે રેકોર્ડ</div></h3></div>
+      <div class="grid" style="grid-template-columns:repeat(4,1fr);">
+        ${EXPORT_ENTITIES.map(([k,l])=>`<div style="background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">
+          <div><div class="hint">${l}</div><b style="font-size:16px;">${store(k).length}</b></div><span style="color:var(--muted);">🗄️</span>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3>Backup &amp; Export / બેકઅપ<div class="hint" style="font-weight:400;">Export your farm data to CSV / CSV ડાઉનલોડ કરો</div></h3>
+        <button class="btn" onclick="exportAll()">⬇ Export All / બધું ડાઉનલોડ</button></div>
+      <div class="grid" style="grid-template-columns:1fr 1fr;">
+        ${EXPORT_ENTITIES.map(([k,l])=>`<div style="display:flex;justify-content:space-between;align-items:center;background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;">
+          <span>${l} (${store(k).length})</span>
+          <button class="actions" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;" onclick="exportOne('${k}','${l}')">⬇</button>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3>About / વિશે<div class="hint" style="font-weight:400;">Application info / એપ્લિકેશન માહિતી</div></h3></div>
+      <div style="display:flex;gap:12px;align-items:center;">
+        <img src="images/umiya-farm-logo.png" style="width: 60px;" alt="Umiya Farm logo">
+        <div><b>UMIYA FARM</b><div class="hint">Personal Farm Management System · v1.0</div></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3>Appearance / દેખાવ<div class="hint" style="font-weight:400;">Display preferences / દેખાવ પસંદગી</div></h3></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;flex-wrap:wrap;gap:10px;">
+        <span>Theme / થીમ</span>
+        <div style="display:flex;gap:8px;">
+          <button class="qbtn" style="margin:0;${t==='dark'?'outline:2px solid var(--yellow);':''}" onclick="setTheme('dark')">🌙 Dark / ડાર્ક</button>
+          <button class="qbtn" style="margin:0;${t==='black'?'outline:2px solid var(--yellow);':''}" onclick="setTheme('black')">⚫ Black / બ્લેક</button>
+          <button class="qbtn" style="margin:0;${t==='light'?'outline:2px solid var(--yellow);':''}" onclick="setTheme('light')">⚪ White / વાઇટ</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel" style="border-color:#5a2323;">
+      <div class="panel-head"><h3 style="color:var(--red);">Danger Zone / જોખમી વિસ્તાર</h3></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div><b>Clear All Data / બધો ડેટા કાઢી નાખો</b><div class="hint">Permanently deletes every record from this browser / બધો ડેટા કાયમ માટે ભૂસાઈ જશે</div></div>
+        <button class="btn" style="background:var(--red);color:#fff;" onclick="clearAllData()">Clear All Data / કાઢી નાખો</button>
+      </div>
+    </div>
+    <div class="foot">© 2026 UMIYA FARM · Developed by sumit haripara</div>`;
+}
+function clearAllData(){
+
+  const ok = confirm(
+    '⚠️ ચેતવણી!\n\n' +
+    'શું તમે ખરેખર બધો Farm Data કાઢી નાખવા માંગો છો?\n\n' +
+    'આ માહિતી કાયમ માટે delete થઈ જશે.\n' +
+    'પછી તેને પાછી લાવી શકાશે નહીં.\n\n' +
+    'OK = હા, બધો Data Delete કરો\n' +
+    'Cancel = ના, Data રાખો'
+  );
+
+  if(!ok){
+    return;
+  }
+
+  EXPORT_ENTITIES.forEach(([k])=>{
+    localStorage.removeItem('agritech_'+k);
+  });
+
+  alert('✅ બધો Data સફળતાપૂર્વક Delete થઈ ગયો.');
+
+  render();
+}
+
+function render(){
+  if(activeKey==='dashboard') renderDashboard();
+  else if(activeKey==='farmOverview') renderFarmOverview();
+  else if(activeKey==='profitLoss') renderProfitLoss();
+  else if(activeKey==='cropAnalysis') renderCropAnalysis();
+  else if(activeKey==='productionAnalysis') renderProductionAnalysis();
+  else if(activeKey==='yearlyReport') renderYearlyReport();
+  else if(activeKey==='settings') renderSettings();
+  else renderModulePage(activeKey);
+}
+
+buildSidebar();
+setActive('dashboard');
+</script>
+</body>
+</html>
